@@ -1,6 +1,55 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="viewHandler"
+            type="com.wiacek.wikipediaarticles.ui.list.ArticleListViewHandler" />
+        <variable
+            name="viewModel"
+            type="com.wiacek.wikipediaarticles.ui.list.ArticleListViewModel" />
+    </data>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/filter_linear_layout" >
 
-</LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/fragment_list_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorLightGray" />
+
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom"
+            android:visibility="@{viewModel.loading}"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:gravity="center"
+            android:paddingTop="16dp"
+            android:visibility="@{viewModel.reconnectMessageVisible}">
+
+            <TextView
+                android:theme="@style/TextViewListItemPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/article_list_empty_message"
+                android:paddingBottom="16dp"/>
+
+            <Button
+                android:theme="@style/TextViewListItemPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="@string/article_list_refresh_button"
+                android:onClick="@{() -> viewHandler.onRefresh()}"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
+</layout>

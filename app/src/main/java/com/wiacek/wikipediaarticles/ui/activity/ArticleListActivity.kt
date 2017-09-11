@@ -8,12 +8,13 @@ import com.wiacek.pulselive.di.modules.ArticleListActivityModule
 import com.wiacek.wikipediaarticles.R
 import com.wiacek.wikipediaarticles.WikipediaArticlesApplication
 import com.wiacek.wikipediaarticles.ui.list.ArticleListFragment
+import com.wiacek.wikipediaarticles.ui.list.OnListItemSelectedListener
 
 /**
  * Created by wiacek.dawid@gmail.com
  */
 
-class ArticleListActivity: AppCompatActivity() {
+class ArticleListActivity: AppCompatActivity(), OnListItemSelectedListener {
 
     var activityComponent: ArticleListActivityComponent? = null
 
@@ -42,5 +43,9 @@ class ArticleListActivity: AppCompatActivity() {
                     ?.add(ArticleListActivityModule(this))
         }
         return activityComponent
+    }
+
+    override fun onListItemSelected(id: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

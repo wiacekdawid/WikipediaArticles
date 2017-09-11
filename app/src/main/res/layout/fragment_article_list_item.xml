@@ -1,0 +1,36 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.wiacek.wikipediaarticles.ui.list.item.ItemViewModel" />
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:layout_centerVertical="true"
+        android:onClick="@{() -> viewModel.onClickItem()}">
+
+        <TextView
+            android:theme="@style/TextViewListItemPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingBottom="4dp"
+            android:text="@{viewModel.title}"/>
+
+        <TextView
+            android:theme="@style/TextViewListItemSecondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingBottom="4dp"
+            app:visibility="@{viewModel.dist}"
+            android:text='@{viewModel.dist}'/>
+    </LinearLayout>
+</layout>

@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Wikipedia Articles</string>
     <string name="activity_name">Wikipedia Articles</string>
+    <string name="article_list_empty_message">List is empty. Press Refresh to try again.</string>
+    <string name="article_list_refresh_button">Refresh</string>
+    <string name="article_list_error_message">Error while loading data.</string>
 </resources>
