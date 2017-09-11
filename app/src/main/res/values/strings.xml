@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Wikipedia Articles</string>
+    <string name="activity_name">Wikipedia Articles</string>
 </resources>
