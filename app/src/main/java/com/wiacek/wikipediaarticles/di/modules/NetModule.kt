@@ -50,7 +50,7 @@ class NetModule {
 
     @Provides
     @ApplicationScope
-    internal fun providePulseliveService(retrofit: Retrofit): WikipediaService {
+    internal fun provideWikipediaService(retrofit: Retrofit): WikipediaService {
         return retrofit.create<WikipediaService>(WikipediaService::class.java)
     }
 }

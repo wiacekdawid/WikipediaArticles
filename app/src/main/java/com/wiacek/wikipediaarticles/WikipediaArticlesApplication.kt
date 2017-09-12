@@ -5,7 +5,7 @@ import android.support.multidex.MultiDexApplication
 import com.facebook.stetho.Stetho
 import com.squareup.leakcanary.LeakCanary
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider
-import com.wiacek.pulselive.di.modules.ApplicationModule
+import com.wiacek.wikipediaarticles.di.modules.ApplicationModule
 import com.wiacek.wikipediaarticles.data.db.DbConstants
 import com.wiacek.wikipediaarticles.data.db.Migration
 import com.wiacek.wikipediaarticles.data.db.ModelsRealmModule

@@ -1,5 +1,6 @@
 package com.wiacek.wikipediaarticles.ui.list
 
+import android.location.Location
 import com.wiacek.wikipediaarticles.data.DataManager
 import com.wiacek.wikipediaarticles.data.db.ArticleDbHelper
 import com.wiacek.wikipediaarticles.data.db.model.Article
@@ -14,7 +15,8 @@ import io.realm.RealmResults
  * Created by wiacek.dawid@gmail.com
  */
 class ArticleListViewHandler(val dataManager: DataManager,
-                             var articleListViewModel: ArticleListViewModel): ViewHandler {
+                             var articleListViewModel: ArticleListViewModel,
+                             val attachedArticleListFragment: AttachedArticleListFragment): ViewHandler {
     private val compositeDisposable = CompositeDisposable()
     private var realm: Realm? = null
 
@@ -31,13 +33,17 @@ class ArticleListViewHandler(val dataManager: DataManager,
 
     fun onRefresh() {
         if(!articleListViewModel.loading) {
-            articleListViewModel.loading = true
-            var disposable = dataManager.getArticleList()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ value -> onSuccess() },
-                            { t -> onError() })
-            compositeDisposable.add(disposable)
+            var location: Location? = attachedArticleListFragment.getLocation()
+            if(location != null) {
+                var latLon = location.latitude.toString() + "|" + location.longitude.toString()
+                articleListViewModel.loading = true
+                var disposable = dataManager.getArticleList(latLon)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({ value -> onSuccess() },
+                                { t -> onError() })
+                compositeDisposable.add(disposable)
+            }
         }
     }
 

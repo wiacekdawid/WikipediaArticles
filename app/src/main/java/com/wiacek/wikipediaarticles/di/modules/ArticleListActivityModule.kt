@@ -1,7 +1,10 @@
-package com.wiacek.pulselive.di.modules
+package com.wiacek.wikipediaarticles.di.modules
 
+import com.wiacek.wikipediaarticles.api.WikipediaService
 import com.wiacek.wikipediaarticles.data.DataManager
 import com.wiacek.wikipediaarticles.data.DataManagerImp
+import com.wiacek.wikipediaarticles.data.remote.RemoteDataSource
+import com.wiacek.wikipediaarticles.data.remote.RemoteDataSourceImp
 import com.wiacek.wikipediaarticles.di.scopes.ActivityScope
 import com.wiacek.wikipediaarticles.ui.activity.ArticleListActivity
 import com.wiacek.wikipediaarticles.ui.activity.AttachedArticleListActivity
@@ -24,7 +27,13 @@ class ArticleListActivityModule(private val articleListActivity: ArticleListActi
 
     @ActivityScope
     @Provides
-    internal fun provideDataManager(): DataManager {
-        return DataManagerImp()
+    internal fun provideRemoteDataSource(wikipediaService: WikipediaService): RemoteDataSource {
+        return RemoteDataSourceImp(wikipediaService)
+    }
+
+    @ActivityScope
+    @Provides
+    internal fun provideDataManager(remoteDataSource: RemoteDataSource): DataManager {
+        return DataManagerImp(remoteDataSource)
     }
 }

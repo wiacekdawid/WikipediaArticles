@@ -1,6 +1,8 @@
 package com.wiacek.wikipediaarticles.ui.list
 
 import android.graphics.Rect
+import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.app.Fragment
@@ -29,6 +31,8 @@ class ArticleListFragment: Fragment() {
     lateinit var articleListViewHandler: ArticleListViewHandler
     @Inject
     lateinit var attachedArticleListActivity: AttachedArticleListActivity
+    @Inject
+    lateinit var locationManager: LocationManager
 
     private var fragmentArticleListBinding: FragmentArticleListBinding? = null
     private var articleListAdapter: ArticleListAdapter? = null
@@ -87,5 +91,9 @@ class ArticleListFragment: Fragment() {
                     }
                 }
         )
+    }
+
+    fun getLocation(): Location {
+        return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
     }
 }

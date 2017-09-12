@@ -1,6 +1,6 @@
-package com.wiacek.pulselive.di.components
+package com.wiacek.wikipediaarticles.di.components
 
-import com.wiacek.pulselive.di.modules.ArticleListActivityModule
+import com.wiacek.wikipediaarticles.di.modules.ArticleListActivityModule
 import com.wiacek.wikipediaarticles.di.components.ArticleListFragmentComponent
 import com.wiacek.wikipediaarticles.di.modules.ArticleListFragmentModule
 import com.wiacek.wikipediaarticles.di.scopes.ActivityScope
