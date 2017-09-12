@@ -13,6 +13,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
+
 /**
  * Created by wiacek.dawid@gmail.com
  */
@@ -25,7 +26,8 @@ class NetModule {
     @Provides
     @ApplicationScope
     internal fun provideGson(): Gson {
-        return GsonBuilder().create()
+        return GsonBuilder()
+                .create()
     }
 
     @Provides

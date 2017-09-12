@@ -1,14 +1,16 @@
 package com.wiacek.wikipediaarticles.ui.activity
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
-import com.wiacek.wikipediaarticles.di.components.ArticleListActivityComponent
-import com.wiacek.wikipediaarticles.di.modules.ArticleListActivityModule
 import com.wiacek.wikipediaarticles.R
 import com.wiacek.wikipediaarticles.WikipediaArticlesApplication
+import com.wiacek.wikipediaarticles.di.components.ArticleListActivityComponent
+import com.wiacek.wikipediaarticles.di.modules.ArticleListActivityModule
 import com.wiacek.wikipediaarticles.ui.list.ArticleListFragment
 import com.wiacek.wikipediaarticles.ui.list.OnListItemSelectedListener
+
 
 /**
  * Created by wiacek.dawid@gmail.com
@@ -46,6 +48,10 @@ class ArticleListActivity: AppCompatActivity(), OnListItemSelectedListener {
     }
 
     override fun onListItemSelected(id: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val webpage = Uri.parse("https://en.wikipedia.org/?curid=" + id)
+        val intent = Intent(Intent.ACTION_VIEW, webpage)
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivity(intent)
+        }
     }
 }

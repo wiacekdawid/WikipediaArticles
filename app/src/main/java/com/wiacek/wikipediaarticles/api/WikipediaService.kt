@@ -11,6 +11,6 @@ import retrofit2.http.Query
  */
 
 interface WikipediaService {
-    @GET("/w/api.php?action=query&list=geosearch&gsradius=10000&format=jsond")
-    fun getArticleList(@Query("gscoord") latLon: String): Single<Response<ArticleListResponseDto>>
+    @GET("/w/api.php?action=query&list=geosearch&gsradius=10000&format=json")
+    fun getArticleList(@Query("gscoord", encoded = true) latLon: String): Single<Response<ArticleListResponseDto>>
 }
