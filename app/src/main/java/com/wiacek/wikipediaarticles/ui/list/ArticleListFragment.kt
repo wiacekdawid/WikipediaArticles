@@ -4,6 +4,7 @@ import android.graphics.Rect
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
+import android.os.Looper
 import android.os.Parcelable
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
@@ -12,12 +13,15 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.gms.location.*
 import com.wiacek.wikipediaarticles.databinding.FragmentArticleListBinding
 import com.wiacek.wikipediaarticles.di.modules.ArticleListFragmentModule
 import com.wiacek.wikipediaarticles.ui.activity.ArticleListActivity
 import com.wiacek.wikipediaarticles.ui.activity.AttachedArticleListActivity
 import org.parceler.Parcels
+import timber.log.Timber
 import javax.inject.Inject
+
 
 /**
  * Created by wiacek.dawid@gmail.com
@@ -34,6 +38,13 @@ class ArticleListFragment: Fragment() {
     @Inject
     lateinit var locationManager: LocationManager
 
+    var fusedLocationClient: FusedLocationProviderClient? = null
+    private val settingsClient: SettingsClient? = null
+    private var locationRequest: LocationRequest? = null
+    private val locationSettingsRequest: LocationSettingsRequest? = null
+    private var locationCallback: LocationCallback? = null
+    private var currentLocation: Location? = null
+
     private var fragmentArticleListBinding: FragmentArticleListBinding? = null
     private var articleListAdapter: ArticleListAdapter? = null
     var linearLayoutManager: LinearLayoutManager? = null
@@ -43,6 +54,11 @@ class ArticleListFragment: Fragment() {
         val component = (activity as ArticleListActivity)
                 .getArticleListActivityComponent()?.add(ArticleListFragmentModule(this))
         component?.inject(this)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
+        currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        createLocationCallback()
+        createLocationRequest()
+
         if (savedInstanceState != null) {
             savedInstanceState
                     .getParcelable<Parcelable>(BUNDLE_LIST_VIEW_MODEL)?.let {
@@ -56,6 +72,17 @@ class ArticleListFragment: Fragment() {
         super.onDestroy()
         articleListViewHandler.onDetach()
     }
+
+    override fun onResume() {
+        super.onResume()
+        startLocationUpdates()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopLocationUpdates()
+    }
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         linearLayoutManager = LinearLayoutManager(activity)
         if (savedInstanceState != null) {
@@ -93,7 +120,38 @@ class ArticleListFragment: Fragment() {
         )
     }
 
-    fun getLocation(): Location {
-        return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+    fun getLocation(): Location? {
+        return currentLocation
+    }
+
+    private fun createLocationRequest() {
+        locationRequest = LocationRequest()
+        locationRequest?.smallestDisplacement = 20.0f
+        locationRequest?.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+    }
+
+    private fun createLocationCallback() {
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult?) {
+                super.onLocationResult(locationResult)
+                currentLocation = locationResult!!.lastLocation
+                articleListViewHandler.onRefresh()
+            }
+        }
+    }
+
+    private fun startLocationUpdates() {
+        settingsClient?.checkLocationSettings(locationSettingsRequest)
+                ?.addOnSuccessListener(activity, {
+                    fusedLocationClient?.requestLocationUpdates(locationRequest,
+                            locationCallback, Looper.myLooper())
+                })
+                ?.addOnFailureListener(activity, { e ->
+                    Timber.e(e.message)
+                })
+    }
+
+    private fun stopLocationUpdates() {
+        fusedLocationClient?.removeLocationUpdates(locationCallback)
     }
 }
