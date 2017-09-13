@@ -5,6 +5,7 @@ import com.wiacek.wikipediaarticles.data.DataManager
 import com.wiacek.wikipediaarticles.data.db.ArticleDbHelper
 import com.wiacek.wikipediaarticles.data.db.model.Article
 import com.wiacek.wikipediaarticles.ui.base.ViewHandler
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -37,14 +38,18 @@ class ArticleListViewHandler(val dataManager: DataManager,
             if(location != null) {
                 var latLon = location.latitude.toString() + "|" + location.longitude.toString()
                 articleListViewModel.loading = true
-                var disposable = dataManager.getArticleList(latLon)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
+                var disposable = getArticleList(latLon)
                         .subscribe({ value -> onSuccess() },
                                 { t -> onError() })
                 compositeDisposable.add(disposable)
             }
         }
+    }
+
+    fun getArticleList(latLon: String): Single<List<Article>> {
+        return dataManager.getArticleList(latLon)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
     }
 
     fun getAdapterDataFromDb(): RealmResults<Article>? {
